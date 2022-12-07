@@ -1,13 +1,15 @@
-import React, { FC } from 'react';
-import './App.scss';
-import WebSql from './WebSql';
+import React, { FC } from 'react'
+import { BrowserRouter } from "react-router-dom"
+import './App.scss'
+import PageRoutes from './PageRoutes'
 
 const App: FC = () => {
 	return (
-		<div className="App container">
-			<WebSql />
-		</div>
+		<BrowserRouter>
+			<PageRoutes />
+		</BrowserRouter>
 	);
 }
 
 export default App;
+
