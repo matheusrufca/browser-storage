@@ -1,13 +1,8 @@
 
 import { useCallback, useEffect } from 'react'
+import { TUser } from '../../types'
 import { useExecuteSql } from './useExecuteSql'
 import { useLogsTable } from './useLogsTable'
-
-export type TUser = {
-	username: string
-	email: string
-	name: string
-}
 
 const CREATE_TABLE_STATEMENT = 'CREATE TABLE IF NOT EXISTS users(username type unique, email type unique, name)'
 

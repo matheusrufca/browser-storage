@@ -1,6 +1,6 @@
 import React, { ChangeEvent, memo, useState } from 'react'
 import { Button, Form, Table } from 'react-bootstrap'
-import { TUser } from '../shared/websql'
+import { TUser } from '../../types'
 
 type UserRowProps = {
 	user: TUser
@@ -14,7 +14,7 @@ type Props = {
 	onRemove: (user: TUser) => void
 }
 
-const UserRow = memo<UserRowProps>(({ user, onEdit, onRemove }) => {
+const UserListItem = memo<UserRowProps>(({ user, onEdit, onRemove }) => {
 	const [form, setForm] = useState<TUser>(user)
 	const [isEditing, setIsEditing] = useState(false)
 
@@ -94,7 +94,7 @@ const UserRow = memo<UserRowProps>(({ user, onEdit, onRemove }) => {
 	)
 })
 
-export const UsersTable = memo<Props>(({ users, onEdit, onRemove }) => {
+export const UsersList = memo<Props>(({ users, onEdit, onRemove }) => {
 	return (
 		<Table striped bordered hover>
 			<thead>
@@ -108,7 +108,7 @@ export const UsersTable = memo<Props>(({ users, onEdit, onRemove }) => {
 			<tbody>
 				{
 					users.map(user => (
-						<UserRow
+						<UserListItem
 							key={user.username}
 							user={user}
 							onEdit={onEdit}
@@ -121,4 +121,4 @@ export const UsersTable = memo<Props>(({ users, onEdit, onRemove }) => {
 	)
 })
 
-export default UsersTable
+export default UsersList

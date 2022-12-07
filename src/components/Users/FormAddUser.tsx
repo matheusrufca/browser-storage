@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, memo, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { TUser } from '../shared/websql'
+import { TUser } from '../../types'
 
 type Props = {
 	onSubmit: (user: TUser) => void
@@ -8,7 +8,7 @@ type Props = {
 
 const DEFAULT_STATE= { username: '', email: '', name: '', }
 
-const FormAddUser = memo<Props>(({ onSubmit }) => {
+export const FormAddUser = memo<Props>(({ onSubmit }) => {
 	const [{ username, email, name }, setUser] = useState<TUser>(DEFAULT_STATE)
 
 	const handleSubmitUser = (event: FormEvent<HTMLFormElement>) => {

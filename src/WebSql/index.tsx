@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { TUser, useUsersTable } from '../shared/websql'
+import { FormAddUser, UsersList } from '../components/Users'
+import { useUsersTable } from '../shared/websql'
 import { useExecuteSql } from '../shared/websql/useExecuteSql'
-import FormAddUser from './FormAddUser';
-import { UsersTable } from './UsersTable';
+import { TUser } from '../types'
 
 const WebSql = memo(() => {
 	const { executeSql } = useExecuteSql()
@@ -78,7 +78,7 @@ const WebSql = memo(() => {
 				<FormAddUser onSubmit={handleSubmitUser} />
 			</div>
 
-			<UsersTable
+			<UsersList
 				users={users}
 				onEdit={handleEditUser}
 				onRemove={handleRemoveUser}
