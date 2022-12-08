@@ -10,7 +10,7 @@ const STORE_NAME = 'devices'
 export const useDevicesObjectStore = () => {
 	const { getObjectStore } = useIndexedDbObjectStore()
 
-	const add = useCallback(async (device: Omit<IDevice, 'id'>): Promise<TKey> => {
+	const addObject = useCallback(async (device: Omit<IDevice, 'id'>): Promise<TKey> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.add(device)
@@ -20,7 +20,7 @@ export const useDevicesObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const update = useCallback(async (data: IDevice): Promise<TKey> => {
+	const updateObject = useCallback(async (data: IDevice): Promise<TKey> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.put(data)
@@ -30,7 +30,7 @@ export const useDevicesObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const remove = useCallback(async (id: TKey): Promise<void> => {
+	const removeObject = useCallback(async (id: TKey): Promise<void> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.delete(id)
@@ -40,7 +40,7 @@ export const useDevicesObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const getAll = useCallback(async (): Promise<IDevice[]> => {
+	const getAllObjects = useCallback(async (): Promise<IDevice[]> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readonly')
 			const databaseRequest = objectStore?.getAll()
@@ -50,7 +50,7 @@ export const useDevicesObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const getById = useCallback(async (id: TKey): Promise<IDevice> => {
+	const getByIdObject = useCallback(async (id: TKey): Promise<IDevice> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readonly')
 			const databaseRequest = objectStore?.get(id)
@@ -61,10 +61,10 @@ export const useDevicesObjectStore = () => {
 	}, [getObjectStore])
 
 	return {
-		add,
-		update,
-		remove,
-		getById,
-		getAll,
+		addObject,
+		updateObject,
+		removeObject,
+		getByIdObject,
+		getAllObjects,
 	}
 }

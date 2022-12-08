@@ -3,32 +3,32 @@ import { useUsersTable } from '../../shared/websql'
 import { IUser } from '../../types'
 
 export const useUsers = () => {
-	const usersTable = useUsersTable()
+	const { addRow, getAllRows, updateRow, removeRow } = useUsersTable()
 	const [data, setData] = useState<IUser[]>([])
 
 	const getAll = useCallback(async () => {
-		const users = await usersTable.getAll()
+		const users = await getAllRows()
 		setData(users)
-	}, [usersTable])
+	}, [getAllRows])
 
 	const add = useCallback((data: IUser) => {
-		usersTable.add(data)
+		addRow(data)
 		getAll()
-	}, [getAll, usersTable])
+	}, [addRow, getAll])
 
 	const edit = useCallback((id: string, user: IUser) => {
-		usersTable.update(user)
+		updateRow(user)
 		getAll()
-	}, [getAll, usersTable])
+	}, [getAll, updateRow])
 
 	const remove = useCallback((user: IUser) => {
-		usersTable.remove(user)
+		removeRow(user)
 		getAll()
-	}, [getAll, usersTable])
+	}, [getAll, removeRow])
 
 	useEffect(() => {
 		getAll()
-	}, [getAll, usersTable])
+	}, [getAll])
 
 	return {
 		data,

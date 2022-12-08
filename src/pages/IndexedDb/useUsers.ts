@@ -4,51 +4,51 @@ import { IUser } from '../../types'
 
 
 export const useUsers = () => {
-	const userStore = useUsersObjectStore()
+	const {getAllObjects, addObject, updateObject, removeObject} = useUsersObjectStore()
 	const [data, setData] = useState<IUser[]>([])
 
 	const getAll = useCallback(async () => {
 		try {
-			const result = await userStore.getAll()
+			const result = await getAllObjects()
 			console.debug('getAllUsers', result)
 			setData(result)
 		} catch (error) {
 			console.error('Unable to fetch users', error)
 		}
-	}, [userStore])
+	}, [getAllObjects])
 
 	const add = useCallback(async (data: IUser) => {
 		try {
-			const result = await userStore.add(data)
-			await userStore.getAll()
+			const result = await addObject(data)
+			await getAllObjects()
 			console.debug('addUser', result)
 		} catch (error) {
 			console.error('Unable to add user', data, error)
 			throw error
 		}
-	}, [userStore])
+	}, [addObject, getAllObjects])
 
 	const edit = useCallback(async (id: TKey, data: IUser) => {
 		try {
-			const result = await userStore.update(id, data)
-			await userStore.getAll()
+			const result = await updateObject(id, data)
+			await getAll()
 			console.debug('editUser', result)
 		} catch (error) {
 			console.error('Unable to edit user', data, error)
 			throw error
 		}
-	}, [userStore])
+	}, [getAll, updateObject])
 
 	const remove = useCallback(async (data: IUser) => {
 		try {
-			const result = await userStore.remove(data.email)
-			await userStore.getAll()
+			const result = await removeObject(data.email)
+			await getAll()
 			console.debug('removeUser', result)
 		} catch (error) {
 			console.error('Unable to remove user', data, error)
 			throw error
 		}
-	}, [userStore])
+	}, [getAll, removeObject])
 
 	useEffect(() => {
 		getAll()
