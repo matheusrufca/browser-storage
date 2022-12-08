@@ -1,5 +1,5 @@
 
-import { database } from './database'
+import { openDatabase } from './database'
 import { useLogsTable } from './useLogsTable'
 import { useCallback } from 'react';
 
@@ -8,11 +8,9 @@ export const useExecuteSql = () => {
 
 	const executeSql = useCallback((sqlStatement: string, args?: ObjectArray, onSuccess?: SQLStatementCallback, onError?: SQLStatementErrorCallback) => {
 		const handleSuccess: SQLStatementCallback = (transaction, result) => {
-			console.debug('executeSql:success', sqlStatement, result)
 			onSuccess?.(transaction, result)
 		}
 		const handleError: SQLStatementErrorCallback = (transaction, error) => {
-			console.error('executeSql:error', sqlStatement, error)
 			log({
 				type: 'error',
 				message: error.message.toString(),
@@ -22,7 +20,7 @@ export const useExecuteSql = () => {
 			return onError?.(transaction, error) || true
 		}
 
-		database.transaction((transaction) => {
+		openDatabase().transaction((transaction) => {
 			console.debug('executeSql:executing', sqlStatement)
 			transaction.executeSql(sqlStatement, args, handleSuccess, handleError)
 		})

@@ -4,7 +4,7 @@ const DATABASE_SIZE = 5 * MB
 
 export const openDatabase = (): Database => {
 	return window.openDatabase(DATABASE_NAME, '', DATABASE_NAME, DATABASE_SIZE, (db) => {
-		console.debug('Database created', db)
+		console.debug('websql database created', db)
 	})
 }
 

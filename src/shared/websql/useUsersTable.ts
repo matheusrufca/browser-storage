@@ -1,10 +1,10 @@
 
 import { useCallback, useEffect } from 'react'
-import { TUser } from '../../types'
+import { IUser } from '../../types'
 import { useExecuteSql } from './useExecuteSql'
 import { useLogsTable } from './useLogsTable'
 
-const CREATE_TABLE_STATEMENT = 'CREATE TABLE IF NOT EXISTS users(username type unique, email type unique, name)'
+const CREATE_TABLE_STATEMENT = 'CREATE TABLE IF NOT EXISTS users(email type unique, name)'
 
 export const useUsersTable = () => {
 	const { executeSql } = useExecuteSql()
@@ -17,9 +17,9 @@ export const useUsersTable = () => {
 	}, [executeSql])
 
 
-	const add = ({ username, email, name }: TUser) => {
-		const values = [username, email, name]
-		const sqlStatement = `INSERT INTO users(username, email, name) VALUES(?,?,?)`
+	const add = useCallback(({ email, name }: IUser) => {
+		const values = [email, name]
+		const sqlStatement = `INSERT INTO users(email, name) VALUES(?,?)`
 
 		const handleSuccess: SQLStatementCallback = () => {
 			log({
@@ -40,11 +40,11 @@ export const useUsersTable = () => {
 		}
 
 		executeSql(sqlStatement, values, handleSuccess, handleError)
-	}
+	}, [executeSql, log])
 
-	const update = ({ username, email, name }: TUser) => {
-		const values = [username, email, name, username]
-		const sqlStatement = `UPDATE users SET username=?, email=?, name=? WHERE username=?`
+	const update = useCallback(({ email, name }: IUser) => {
+		const values = [email, name, email]
+		const sqlStatement = `UPDATE users SET email=?, name=? WHERE email=?`
 
 		const handleSuccess: SQLStatementCallback = () => {
 			log({
@@ -65,11 +65,11 @@ export const useUsersTable = () => {
 		}
 
 		executeSql(sqlStatement, values, handleSuccess, handleError)
-	}
+	}, [executeSql, log])
 
-	const remove = ({ username }: TUser) => {
-		const values = [username]
-		const sqlStatement = `DELETE FROM users WHERE username=?`
+	const remove = useCallback(({ email }: IUser) => {
+		const values = [email]
+		const sqlStatement = `DELETE FROM users WHERE email=?`
 
 		const handleSuccess: SQLStatementCallback = () => {
 			log({
@@ -90,14 +90,14 @@ export const useUsersTable = () => {
 		}
 
 		executeSql(sqlStatement, values, handleSuccess, handleError)
-	}
+	}, [executeSql, log])
 
-	const getAll = useCallback((): Promise<TUser[]> => {
+	const getAll = useCallback((): Promise<IUser[]> => {
 		const sqlStatement = `SELECT * FROM users`
 
-		return new Promise<TUser[]>((resolve, reject) => {
+		return new Promise<IUser[]>((resolve, reject) => {
 			const handleSuccess: SQLStatementCallback = (_, { rows }) => {
-				const users: TUser[] = Object.values(rows)
+				const users: IUser[] = Object.values(rows)
 				resolve(users)
 			}
 
@@ -116,10 +116,10 @@ export const useUsersTable = () => {
 	}, [createTable])
 
 	return {
-		addUser: add,
-		updateUser: update,
-		removeUser: remove,
-		getAllUsers: getAll,
+		add,
+		update,
+		remove,
+		getAll,
 	}
 }
 

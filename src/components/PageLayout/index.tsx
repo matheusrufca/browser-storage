@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Outlet } from "react-router-dom"
 import PageHeader from '../PageHeader';
 
-const Layout: FC = () => {
+const PageLayout: FC = () => {
 	return (
 		<>
 			<header className='container'>
@@ -16,7 +16,7 @@ const Layout: FC = () => {
 	);
 }
 
-export default Layout;
+export default PageLayout;
 
 
 

@@ -1,5 +1,6 @@
-import { database } from './database'
+
 import { useCallback } from 'react';
+import { database } from './database';
 
 export type TLogMessage = {
 	message: string
@@ -18,7 +19,7 @@ export const useLogsTable = () => {
 		const values = [JSON.stringify(log), log.type, timestamp()]
 		const sqlStatement = `INSERT INTO logs(message, type, timestamp) VALUES(?,?,?)`
 
-		database.transaction((transaction) => {
+		database.transaction(transaction => {
 			transaction.executeSql(sqlStatement, values, undefined, (_, error) => {
 				console.error('An error ocurred while logging transaction', error)
 				return true

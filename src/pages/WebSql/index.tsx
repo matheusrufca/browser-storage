@@ -1,24 +1,16 @@
-import React, { ChangeEvent, FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, memo, useCallback, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { FormAddUser, UsersList } from '../../components/Users'
-import { useUsersTable } from '../../shared/websql'
+import { Users } from '../../components/Users'
 import { useExecuteSql } from '../../shared/websql/useExecuteSql'
-import { TUser } from '../../types'
+import useUsers from './useUsers'
 
 export const WebSql = memo(() => {
 	const { executeSql } = useExecuteSql()
-	const { addUser, getAllUsers, updateUser, removeUser } = useUsersTable()
+	const userStore = useUsers()
 
 	const [sqlStatement, setSqlStatement] = useState('CREATE TABLE logs(message, type, timestamp)')
 
-	const [users, setUsers] = useState<TUser[]>([])
-
-	const loadUsers = useCallback(async () => {
-		const users = await getAllUsers()
-		setUsers(users)
-	}, [getAllUsers])
-
-	const handleSubmitSqlStatement = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmitSqlStatement = useCallback((event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		executeSql(
 			sqlStatement,
@@ -31,30 +23,11 @@ export const WebSql = memo(() => {
 				return true
 			}
 		)
-	}
+	}, [executeSql, sqlStatement])
 
-	const handleSqlStatementChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleSqlStatementChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSqlStatement(event.target.value)
-	}
-
-	const handleSubmitUser = (user: TUser) => {
-		addUser(user)
-		loadUsers()
-	}
-
-	const handleEditUser = (user: TUser) => {
-		updateUser(user)
-		loadUsers()
-	}
-
-	const handleRemoveUser = (user: TUser) => {
-		removeUser(user)
-		loadUsers()
-	}
-
-	useEffect(() => {
-		loadUsers()
-	}, [loadUsers])
+	}, [])
 
 	return (
 		<div className="App container">
@@ -73,16 +46,15 @@ export const WebSql = memo(() => {
 					</Col>
 				</Row>
 			</Form>
-
-			<div className='mb-3'>
-				<FormAddUser onSubmit={handleSubmitUser} />
+			<div>
+				<Users
+					data={userStore.data}
+					onAdd={userStore.add}
+					onEdit={userStore.edit}
+					onRemove={userStore.remove}
+				/>
 			</div>
 
-			<UsersList
-				users={users}
-				onEdit={handleEditUser}
-				onRemove={handleRemoveUser}
-			/>			
 		</div>
 	)
 })
