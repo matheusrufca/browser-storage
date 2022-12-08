@@ -1,27 +1,20 @@
 import React, { ChangeEvent, FormEvent, memo, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import { TUser } from '../../types'
+import { MaybePromise, IUser } from '../../types'
 
 type Props = {
-	onSubmit: (user: TUser) => void
+	onSubmit: MaybePromise<[IUser], void>
 }
 
-const DEFAULT_STATE= { username: '', email: '', name: '', }
+const DEFAULT_STATE = { email: '', name: '', }
 
 export const FormAddUser = memo<Props>(({ onSubmit }) => {
-	const [{ username, email, name }, setUser] = useState<TUser>(DEFAULT_STATE)
+	const [{ email, name }, setUser] = useState<IUser>(DEFAULT_STATE)
 
-	const handleSubmitUser = (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault()		
-		onSubmit({ username, email, name })
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		await onSubmit({ email, name })
 		setUser(DEFAULT_STATE)
-	}
-
-	const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setUser((previous) => ({
-			...previous,
-			username: event.target.value
-		}))
 	}
 
 	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -41,16 +34,9 @@ export const FormAddUser = memo<Props>(({ onSubmit }) => {
 
 
 	return (
-		<Form onSubmit={handleSubmitUser} className='mb-3'>
+		<Form onSubmit={handleSubmit} className='mb-3'>
 			<Row className="align-items-center">
-				<Col xs="2">
-					<Form.Control
-						value={username}
-						placeholder='Username'
-						onChange={handleUsernameChange}
-					/>
-				</Col>
-				<Col xs="4">
+				<Col xs="5">
 					<Form.Control
 						type='email'
 						value={email}
@@ -58,7 +44,7 @@ export const FormAddUser = memo<Props>(({ onSubmit }) => {
 						onChange={handleEmailChange}
 					/>
 				</Col>
-				<Col xs="4">
+				<Col xs="5">
 					<Form.Control
 						value={name}
 						placeholder='Name'
@@ -67,7 +53,7 @@ export const FormAddUser = memo<Props>(({ onSubmit }) => {
 				</Col>
 				<Col xs="2">
 					<Button variant="primary" type="submit">
-						Create user
+						Add
 					</Button>
 				</Col>
 			</Row>

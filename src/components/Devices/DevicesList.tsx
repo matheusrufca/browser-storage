@@ -1,31 +1,38 @@
 import React, { ChangeEvent, CSSProperties, memo, useState } from 'react'
 import { Button, ButtonGroup, Form, Table } from 'react-bootstrap'
-import { TKey } from '../../shared/indexeddb/useUsersObjectStore'
-import { IUser } from '../../types'
+import { TKey } from '../../shared/indexeddb/useDevicesObjectStore'
+import { IDevice } from '../../types'
 
-type UserRowProps = {
-	data: IUser
-	onEdit: (id: TKey, data: IUser) => void
-	onRemove: (data: IUser) => void
+type DeviceRowProps = {
+	data: IDevice
+	onEdit: (id: TKey, data: IDevice) => void
+	onRemove: (data: IDevice) => void
 }
 
 type Props = {
-	data: IUser[],
-	onEdit: (id: TKey, data: IUser) => void
-	onRemove: (data: IUser) => void
+	data: IDevice[],
+	onEdit: (id: TKey, data: IDevice) => void
+	onRemove: (data: IDevice) => void
 }
+
 
 const styles: Record<string, CSSProperties> = {
 	tableCell: { verticalAlign: 'middle', },
+	id: { width: '80px', textAlign: 'center', },
 	actions: { width: '100px', textAlign: 'center', }
 }
 
-const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
-	const [formValues, setFormValues] = useState<IUser>(data)
+
+const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
+	const [formValues, setFormValues] = useState<IDevice>(data)
 	const [isEditing, setIsEditing] = useState(false)
 
 	const handleEdit = () => {
 		setIsEditing(true)
+	}
+
+	const handleRemove = async () => {
+		await onRemove(data)
 	}
 
 	const handleCancel = () => {
@@ -33,37 +40,55 @@ const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
 		setFormValues(data)
 	}
 
-	const handleRemove = async () => {
-		await onRemove(data)
-	}
-
 	const handleSave = async () => {
-		await onEdit(data.email, formValues)
+		await onEdit(data.id, formValues)
 		setIsEditing(false)
 	}
 
-	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleModelChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setFormValues((previous) => ({
 			...previous,
-			name: event.target.value
+			model: event.target.value
+		}))
+	}
+
+	const handleBrandChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setFormValues((previous) => ({
+			...previous,
+			brand: event.target.value
 		}))
 	}
 
 	return (
 		<tr>
-			<td style={{ ...styles.tableCell }}>
-				{data.email}
+			<td style={{ ...styles.tableCell, ...styles.id }}>
+				{data.id}
 			</td>
 
 			<td style={{ ...styles.tableCell }}>
 				{isEditing
 					? (
 						<Form.Control
-							value={formValues.name}
-							onChange={handleNameChange}
+							type='model'
+							value={formValues.model}
+							placeholder='Model'
+							onChange={handleModelChange}
 						/>
 					)
-					: data.name
+					: data.model
+				}
+			</td>
+
+			<td style={{ ...styles.tableCell }}>
+				{isEditing
+					? (
+						<Form.Control
+							value={formValues.brand}
+							placeholder='Brand'
+							onChange={handleBrandChange}
+						/>
+					)
+					: data.brand
 				}
 			</td>
 
@@ -97,22 +122,23 @@ const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
 	)
 })
 
-export const UsersList = memo<Props>(({ data, onEdit, onRemove }) => {
+export const DevicesList = memo<Props>(({ data: devices, onEdit, onRemove }) => {
 	return (
 		<Table striped bordered hover>
 			<thead>
 				<tr>
-					<th style={{ ...styles.tableCell }}>Email</th>
-					<th style={{ ...styles.tableCell }}>Name</th>
+					<th style={{ ...styles.tableCell, ...styles.id }}>#</th>
+					<th style={{ ...styles.tableCell }}>Model</th>
+					<th style={{ ...styles.tableCell }}>Brand</th>
 					<th style={{ ...styles.tableCell, ...styles.actions }}></th>
 				</tr>
 			</thead>
 			<tbody>
 				{
-					data.map(user => (
-						<UserListItem
-							key={user.email}
-							data={user}
+					devices.map(device => (
+						<ListItem
+							key={device.id}
+							data={device}
 							onEdit={onEdit}
 							onRemove={onRemove}
 						/>
@@ -123,4 +149,4 @@ export const UsersList = memo<Props>(({ data, onEdit, onRemove }) => {
 	)
 })
 
-export default UsersList
+export default DevicesList
