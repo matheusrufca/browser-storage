@@ -31,8 +31,8 @@ const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
 		setIsEditing(true)
 	}
 
-	const handleRemove = () => {
-		onRemove(data)
+	const handleRemove = async () => {
+		await onRemove(data)
 	}
 
 	const handleCancel = () => {
@@ -80,13 +80,15 @@ const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
 			</td>
 
 			<td style={{ ...styles.tableCell }}>
-				{!isEditing && data.brand}
-				{isEditing &&
-					<Form.Control
-						value={formValues.brand}
-						placeholder='Brand'
-						onChange={handleBrandChange}
-					/>
+				{isEditing
+					? (
+						<Form.Control
+							value={formValues.brand}
+							placeholder='Brand'
+							onChange={handleBrandChange}
+						/>
+					)
+					: data.brand
 				}
 			</td>
 

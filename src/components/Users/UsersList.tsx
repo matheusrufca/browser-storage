@@ -33,8 +33,8 @@ const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
 		setFormValues(data)
 	}
 
-	const handleRemove = () => {
-		onRemove(data)
+	const handleRemove = async () => {
+		await onRemove(data)
 	}
 
 	const handleSave = async () => {

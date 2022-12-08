@@ -7,5 +7,3 @@ export const openDatabase = (): Database => {
 		console.debug('websql database created', db)
 	})
 }
-
-export const database = openDatabase()

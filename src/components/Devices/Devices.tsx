@@ -19,6 +19,7 @@ export const Devices = memo<Props>(({ data, onAdd, onEdit, onRemove }) => {
 			<header>
 				<h2>Devices</h2>
 			</header>
+			
 			<div className='mb-2'>
 				<FormAddDevice onSubmit={onAdd} />
 			</div>

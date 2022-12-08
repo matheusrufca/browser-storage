@@ -13,7 +13,7 @@ const DEFAULT_STATE: PartialDevice = { model: '', brand: '', }
 export const FormAddDevice = memo<Props>(({ onSubmit }) => {
 	const [{ model, brand }, setDevice] = useState<PartialDevice>(DEFAULT_STATE)
 
-	const handleSubmitDevice = async (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		await onSubmit({ model, brand })
 		setDevice(DEFAULT_STATE)
@@ -26,7 +26,6 @@ export const FormAddDevice = memo<Props>(({ onSubmit }) => {
 		}))
 	}
 
-
 	const handleBrandChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setDevice((previous) => ({
 			...previous,
@@ -34,9 +33,8 @@ export const FormAddDevice = memo<Props>(({ onSubmit }) => {
 		}))
 	}
 
-
 	return (
-		<Form onSubmit={handleSubmitDevice} className='mb-3'>
+		<Form onSubmit={handleSubmit} className='mb-3'>
 			<Row className="align-items-center">
 				<Col xs="5">
 					<Form.Control

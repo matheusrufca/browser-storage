@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { BrowserRouter } from "react-router-dom"
-import './App.scss'
 import PageRoutes from './PageRoutes'
+import './App.scss'
 
 const App: FC = () => {
 	return (
