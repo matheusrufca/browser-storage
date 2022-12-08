@@ -17,7 +17,7 @@ export const useUsersTable = () => {
 	}, [executeSql])
 
 
-	const add = useCallback(({ email, name }: IUser) => {
+	const addRow = useCallback(({ email, name }: IUser) => {
 		const values = [email, name]
 		const sqlStatement = `INSERT INTO users(email, name) VALUES(?,?)`
 
@@ -42,7 +42,7 @@ export const useUsersTable = () => {
 		executeSql(sqlStatement, values, handleSuccess, handleError)
 	}, [executeSql, log])
 
-	const update = useCallback(({ email, name }: IUser) => {
+	const updateRow = useCallback(({ email, name }: IUser) => {
 		const values = [email, name, email]
 		const sqlStatement = `UPDATE users SET email=?, name=? WHERE email=?`
 
@@ -67,7 +67,7 @@ export const useUsersTable = () => {
 		executeSql(sqlStatement, values, handleSuccess, handleError)
 	}, [executeSql, log])
 
-	const remove = useCallback(({ email }: IUser) => {
+	const removeRow = useCallback(({ email }: IUser) => {
 		const values = [email]
 		const sqlStatement = `DELETE FROM users WHERE email=?`
 
@@ -92,7 +92,7 @@ export const useUsersTable = () => {
 		executeSql(sqlStatement, values, handleSuccess, handleError)
 	}, [executeSql, log])
 
-	const getAll = useCallback((): Promise<IUser[]> => {
+	const getAllRows = useCallback((): Promise<IUser[]> => {
 		const sqlStatement = `SELECT * FROM users`
 
 		return new Promise<IUser[]>((resolve, reject) => {
@@ -116,10 +116,10 @@ export const useUsersTable = () => {
 	}, [createTable])
 
 	return {
-		add,
-		update,
-		remove,
-		getAll,
+		 addRow,
+		 updateRow,
+		 removeRow,
+		 getAllRows,
 	}
 }
 

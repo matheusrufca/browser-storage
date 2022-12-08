@@ -10,7 +10,7 @@ const STORE_NAME = 'users'
 export const useUsersObjectStore = () => {
 	const { getObjectStore } = useIndexedDbObjectStore()
 
-	const add = useCallback(async (data: IUser): Promise<TKey> => {
+	const addObject = useCallback(async (data: IUser): Promise<TKey> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.add(data)
@@ -20,7 +20,7 @@ export const useUsersObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const update = useCallback(async (id: TKey, data: IUser): Promise<TKey> => {
+	const updateObject = useCallback(async (id: TKey, data: IUser): Promise<TKey> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.put(data)
@@ -30,7 +30,7 @@ export const useUsersObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const remove = useCallback(async (id: TKey): Promise<void> => {
+	const removeObject = useCallback(async (id: TKey): Promise<void> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readwrite')
 			const databaseRequest = objectStore?.delete(id)
@@ -40,7 +40,7 @@ export const useUsersObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const getAll = useCallback(async (): Promise<IUser[]> => {
+	const getAllObjects = useCallback(async (): Promise<IUser[]> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readonly')
 			const databaseRequest = objectStore?.getAll()
@@ -50,7 +50,7 @@ export const useUsersObjectStore = () => {
 		}
 	}, [getObjectStore])
 
-	const getById = useCallback(async (id: TKey): Promise<IUser> => {
+	const getObjectById = useCallback(async (id: TKey): Promise<IUser> => {
 		try {
 			const objectStore = await getObjectStore(STORE_NAME, 'readonly')
 			const databaseRequest = objectStore?.get(id)
@@ -61,10 +61,10 @@ export const useUsersObjectStore = () => {
 	}, [getObjectStore])
 
 	return {
-		add,
-		update,
-		remove,
-		getById,
-		getAll,
+		addObject,
+		updateObject,
+		removeObject,
+		getObjectById,
+		getAllObjects,
 	}
 }

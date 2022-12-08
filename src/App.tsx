@@ -5,7 +5,7 @@ import './App.scss'
 
 const App: FC = () => {
 	return (
-		<BrowserRouter>
+		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			<PageRoutes />
 		</BrowserRouter>
 	);
