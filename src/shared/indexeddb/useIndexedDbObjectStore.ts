@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { IDatabaseConfig, openDatabase } from './database'
-import { objectStores } from './objectStores';
+import { indexes, objectStores } from './objectStores';
 
 const databaseConfig: IDatabaseConfig = {
 	onUpgradeNeeded: (_, database) => {
@@ -10,8 +10,15 @@ const databaseConfig: IDatabaseConfig = {
 
 const loadSchema = (database: IDBDatabase) => {
 	Object.entries(objectStores).forEach(([storeName, storeConfig]) => {
-		database.createObjectStore(storeName, storeConfig)
+		const store = database.createObjectStore(storeName, storeConfig)
+		const index = indexes[storeName]
+
+		if (index) {
+			store.createIndex(index.name, index.keyPath, index.options)
+		}
 	})
+
+
 }
 
 export const useIndexedDbObjectStore = () => {

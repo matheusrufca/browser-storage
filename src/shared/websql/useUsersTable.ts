@@ -6,6 +6,8 @@ import { useLogsTable } from './useLogsTable'
 
 const CREATE_TABLE_STATEMENT = 'CREATE TABLE IF NOT EXISTS users(email type unique, name)'
 
+export type TKey = IUser['email']
+
 export const useUsersTable = () => {
 	const { executeSql } = useExecuteSql()
 	const { log } = useLogsTable()
@@ -15,7 +17,6 @@ export const useUsersTable = () => {
 			console.debug('Users table created')
 		})
 	}, [executeSql])
-
 
 	const addRow = useCallback(({ email, name }: IUser) => {
 		const values = [email, name]
@@ -67,8 +68,8 @@ export const useUsersTable = () => {
 		executeSql(sqlStatement, values, handleSuccess, handleError)
 	}, [executeSql, log])
 
-	const removeRow = useCallback(({ email }: IUser) => {
-		const values = [email]
+	const removeRow = useCallback((id: TKey) => {
+		const values = [id]
 		const sqlStatement = `DELETE FROM users WHERE email=?`
 
 		const handleSuccess: SQLStatementCallback = () => {

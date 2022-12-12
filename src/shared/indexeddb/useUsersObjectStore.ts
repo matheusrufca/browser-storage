@@ -3,7 +3,7 @@ import { IUser } from '../../types'
 import { useIndexedDbObjectStore } from './useIndexedDbObjectStore'
 import { createPromise } from './utils'
 
-export type TKey = IUser['email']
+export type TKey = NonNullable<IUser['id']>
 
 const STORE_NAME = 'users'
 

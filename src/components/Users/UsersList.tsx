@@ -16,8 +16,9 @@ type Props = {
 }
 
 const styles: Record<string, CSSProperties> = {
+	id: { width: '80px', textAlign: 'center', },
 	tableCell: { verticalAlign: 'middle', },
-	actions: { width: '100px', textAlign: 'center', }
+	actions: { width: '100px', textAlign: 'center', },
 }
 
 const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
@@ -38,8 +39,16 @@ const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
 	}
 
 	const handleSave = async () => {
-		await onEdit(data.email, formValues)
+		if (!data.id) return
+		await onEdit(data.id, formValues)
 		setIsEditing(false)
+	}
+
+	const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setFormValues((previous) => ({
+			...previous,
+			email: event.target.value
+		}))
 	}
 
 	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,18 +60,32 @@ const UserListItem = memo<UserRowProps>(({ data, onEdit, onRemove }) => {
 
 	return (
 		<tr>
-			<td style={{ ...styles.tableCell }}>
-				{data.email}
+			<td style={{ ...styles.tableCell, ...styles.id }}>
+				{isEditing
+					? <Form.Control value={formValues.id} readOnly disabled />
+					: data.id
+				}
 			</td>
-
 			<td style={{ ...styles.tableCell }}>
 				{isEditing
 					? (
 						<Form.Control
-							value={formValues.name}
-							onChange={handleNameChange}
-						/>
+							type='email'
+							value={formValues.email}
+							onChange={handleEmailChange}
+							placeholder='Email' />
 					)
+					: data.email
+				}
+			</td>
+
+			<td style={{ ...styles.tableCell }}>
+				{isEditing
+					? <Form.Control
+						value={formValues.name}
+						onChange={handleNameChange}
+						placeholder='Name'
+					/>
 					: data.name
 				}
 			</td>
@@ -102,6 +125,7 @@ export const UsersList = memo<Props>(({ data, onEdit, onRemove }) => {
 		<Table striped bordered hover>
 			<thead>
 				<tr>
+					<th style={{ ...styles.tableCell, ...styles.id }}>#</th>
 					<th style={{ ...styles.tableCell }}>Email</th>
 					<th style={{ ...styles.tableCell }}>Name</th>
 					<th style={{ ...styles.tableCell, ...styles.actions }}></th>

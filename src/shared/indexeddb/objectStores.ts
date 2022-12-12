@@ -4,10 +4,28 @@ export const objectStores: Record<string, IDBObjectStoreParameters | undefined> 
 		autoIncrement: true,
 	},
 	users: {
-		keyPath: 'email'
+		keyPath: 'id',
+		autoIncrement: true,
 	},
 	logs: {
 		keyPath: 'id',
 		autoIncrement: true,
 	}
 })
+
+
+type IIndexConfig = {
+	name: string
+	keyPath: string
+	options?: IDBIndexParameters
+}
+
+export const indexes: Record<string, IIndexConfig> = {
+	users: {
+		name: 'index_users_email',
+		keyPath: 'email',
+		options: {
+			unique: true
+		}
+	}
+}

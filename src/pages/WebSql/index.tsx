@@ -1,8 +1,8 @@
 import React, { ChangeEvent, FormEvent, memo, useCallback, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
+import useUsers from './useUsers'
 import { Users } from '../../components/Users'
 import { useExecuteSql } from '../../shared/websql/useExecuteSql'
-import useUsers from './useUsers'
 
 export const WebSql = memo(() => {
 	const { executeSql } = useExecuteSql()
@@ -30,32 +30,43 @@ export const WebSql = memo(() => {
 	}, [])
 
 	return (
-		<div className="App container">
-			<Form onSubmit={handleSubmitSqlStatement} className='mb-3'>
-				<Row className="align-items-center">
-					<Col xs="9">
-						<Form.Control
-							value={sqlStatement}
-							onChange={handleSqlStatementChange}
-						/>
-					</Col>
-					<Col xs="auto">
-						<Button variant="primary" type="submit">
-							Execute SQL
-						</Button>
-					</Col>
-				</Row>
-			</Form>
-			<div>
-				<Users
-					data={userStore.data}
-					onAdd={userStore.add}
-					onEdit={userStore.edit}
-					onRemove={userStore.remove}
-				/>
-			</div>
+		<section>
+			<header>
+				<h1>WebSQL</h1>
+			</header>
 
-		</div>
+			<main className='py-4'>
+				<div className='mb-3'>
+					<Form onSubmit={handleSubmitSqlStatement} >
+						<Row className="align-items-center">
+							<Col xs="9">
+								<Form.Control
+									value={sqlStatement}
+									onChange={handleSqlStatementChange}
+								/>
+							</Col>
+		
+							<Col xs="auto">
+								<Button variant="primary" type="submit">
+									Execute SQL
+								</Button>
+							</Col>
+						</Row>
+					</Form>
+				</div>
+
+				<hr />
+
+				<div className='mb-3'>
+					<Users
+						data={userStore.data}
+						onAdd={userStore.add}
+						onEdit={userStore.edit}
+						onRemove={userStore.remove}
+					/>
+				</div>
+			</main>
+		</section >
 	)
 })
 

@@ -9,25 +9,33 @@ export const IndexedDb: FC = () => {
 	const deviceStore = useDevices()
 
 	return (
-		<div>
-			<div className='mb-2'>
-				<Users
-					data={userStore.data}
-					onAdd={userStore.add}
-					onEdit={userStore.edit}
-					onRemove={userStore.remove}
-				/>
-			</div>
+		<section>
+			<header>
+				<h1>IndexedDB</h1>
+			</header>
 
-			<div className='mb-2'>
-				<Devices 
-					data={deviceStore.data}
-					onAdd={deviceStore.add}
-					onEdit={deviceStore.edit}
-					onRemove={deviceStore.remove}
-				/>
-			</div>
-		</div>
+			<main className='py-4'>
+				<div className='mb-3'>
+					<Users
+						data={userStore.data}
+						onAdd={userStore.add}
+						onEdit={userStore.edit}
+						onRemove={userStore.remove}
+					/>
+				</div>
+				
+				<hr />
+
+				<div className='mb-3'>
+					<Devices
+						data={deviceStore.data}
+						onAdd={deviceStore.add}
+						onEdit={deviceStore.edit}
+						onRemove={deviceStore.remove}
+					/>
+				</div>
+			</main>
+		</section>
 	)
 }
 

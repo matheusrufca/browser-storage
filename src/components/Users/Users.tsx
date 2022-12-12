@@ -1,7 +1,9 @@
 import React, { memo } from 'react'
 import { FormAddUser, UsersList } from '.'
-import { TKey } from '../../shared/indexeddb/useUsersObjectStore'
+import { TKey as IndexedDbUserKey} from '../../shared/indexeddb/useUsersObjectStore'
 import { IUser, MaybePromise } from '../../types'
+
+export type TKey = IndexedDbUserKey
 
 type Props = {
 	data: IUser[]

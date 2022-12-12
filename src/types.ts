@@ -3,6 +3,7 @@ export type AsyncFunction<Parameters extends unknown[], Result> = (...args: Para
 export type MaybePromise<P extends unknown[], T> = SyncFunction<P, T> | AsyncFunction<P, T>
 
 export type IUser = {
+	id?: number
 	email: string
 	name: string
 }

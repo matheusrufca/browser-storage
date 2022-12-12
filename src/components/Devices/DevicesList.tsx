@@ -62,7 +62,10 @@ const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
 	return (
 		<tr>
 			<td style={{ ...styles.tableCell, ...styles.id }}>
-				{data.id}
+				{isEditing
+					? <Form.Control value={formValues.id} readOnly disabled />
+					: data.id
+				}
 			</td>
 
 			<td style={{ ...styles.tableCell }}>
@@ -71,8 +74,8 @@ const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
 						<Form.Control
 							type='model'
 							value={formValues.model}
-							placeholder='Model'
 							onChange={handleModelChange}
+							placeholder='Model'
 						/>
 					)
 					: data.model
@@ -82,7 +85,7 @@ const ListItem = memo<DeviceRowProps>(({ data, onEdit, onRemove }) => {
 			<td style={{ ...styles.tableCell }}>
 				{isEditing
 					? (
-						<Form.Control
+						<Form.Control 
 							value={formValues.brand}
 							placeholder='Brand'
 							onChange={handleBrandChange}

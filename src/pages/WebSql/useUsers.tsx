@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useUsersTable } from '../../shared/websql'
+import { useUsersTable } from '../../shared/websql/useUsersTable'
 import { IUser } from '../../types'
 
 export const useUsers = () => {
@@ -16,13 +16,13 @@ export const useUsers = () => {
 		getAll()
 	}, [addRow, getAll])
 
-	const edit = useCallback((id: string, user: IUser) => {
+	const edit = useCallback((id: number, user: IUser) => {
 		updateRow(user)
 		getAll()
 	}, [getAll, updateRow])
 
 	const remove = useCallback((user: IUser) => {
-		removeRow(user)
+		removeRow(user.email)
 		getAll()
 	}, [getAll, removeRow])
 

@@ -4,7 +4,7 @@ import { IUser } from '../../types'
 
 
 export const useUsers = () => {
-	const {getAllObjects, addObject, updateObject, removeObject} = useUsersObjectStore()
+	const { getAllObjects, addObject, updateObject, removeObject } = useUsersObjectStore()
 	const [data, setData] = useState<IUser[]>([])
 
 	const getAll = useCallback(async () => {
@@ -20,13 +20,13 @@ export const useUsers = () => {
 	const add = useCallback(async (data: IUser) => {
 		try {
 			const result = await addObject(data)
-			await getAllObjects()
+			await getAll()
 			console.debug('addUser', result)
 		} catch (error) {
 			console.error('Unable to add user', data, error)
 			throw error
 		}
-	}, [addObject, getAllObjects])
+	}, [addObject, getAll])
 
 	const edit = useCallback(async (id: TKey, data: IUser) => {
 		try {
@@ -40,8 +40,9 @@ export const useUsers = () => {
 	}, [getAll, updateObject])
 
 	const remove = useCallback(async (data: IUser) => {
+		if (!data.id) return
 		try {
-			const result = await removeObject(data.email)
+			const result = await removeObject(data.id)
 			await getAll()
 			console.debug('removeUser', result)
 		} catch (error) {
